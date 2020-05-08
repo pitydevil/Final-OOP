@@ -12,6 +12,8 @@ public class Main {
 			System.out.println("X is above 9");
 		else
 			System.out.println("X is below or equal to 9");
+		
+		
 	}
 	
 }
