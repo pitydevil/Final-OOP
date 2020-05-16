@@ -1,5 +1,9 @@
 package oopFinalPkg.Model.Humans;
 
+import java.util.ArrayList;
+
+import oopFinalPkg.Model.Transaction;
+
 public class Porter extends Admin implements PersonHelper{
 
 	
@@ -10,11 +14,16 @@ public class Porter extends Admin implements PersonHelper{
 		// TODO Auto-generated constructor stub
 	}
 
-
+	
+	// Looping untuk seluruh objek transaction di dalam array
+	// Untuk porter, hanya print yang usernamenya sama seperti si Porter
 	@Override
-	public void printTransactionList(String nama) {
-		// TODO Auto-generated method stub
-		
+	public void printTransactionList(String nama, ArrayList<Transaction> transactionArray) {
+		for (Transaction currTransactionItem : transactionArray) {
+			if (currTransactionItem.getTransUsername().equals(nama)) {
+				currTransactionItem.getTransactionInfo();
+			}
+		}
 	}
 
 	
@@ -31,7 +40,7 @@ public class Porter extends Admin implements PersonHelper{
 	@Override
 	public String determineLocation(String category) {
 		String location = "";
-		if(category.equals("Vegatable")) {
+		if(category.equals("Vegetable")) {
 			location = chillerLokasi[random.nextInt(2)] + random.nextInt(50);
 		}else if (category.equals("Canned")) {
 			location = cannedLokasi[random.nextInt(5)] + random.nextInt(100);
