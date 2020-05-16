@@ -16,6 +16,8 @@ public abstract class HelperItem {
 	protected ArrayList<Transaction> transactionArray = new ArrayList<Transaction>();
 	protected Scanner scanner = new Scanner(System.in);
 	protected String crrnDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-	//String nama, int id, int password, boolean accountType
+	protected String crrnDateWM = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+
+	
 	
 }

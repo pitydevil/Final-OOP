@@ -37,9 +37,22 @@ public class Main extends HelperItem {
 	//String nama, int id, String password, boolean accountType, int numberOfTransaction, String joinDate,String lastAccessDate
 	//Jika accType = true, maka dia admin. else untuk porter
 	public Main() {
-		// Defaults admin and porter
-		adminArray.add(new Admin("Master", 0,"1234", true, 0,crrnDate, crrnDate ));
-		porterArray.add(new Porter("Mikhael", 0, "1234", false, 0, crrnDate, crrnDate));
+		// Defaults admin and porter, and inventoryItem
+		String lokasi = admin.determineLocation("Vegetable");
+		itemArray.add(new Item("23-05-2020", random.nextInt(999), 4600, 7000, lokasi ,"Carrot","Vegetable"));
+		lokasi = admin.determineLocation("Fruit");
+		itemArray.add(new Item("18-01-2020", random.nextInt(999), 7550, 100000, lokasi ,"Buah Naga","Fruit"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("29-07-2020", random.nextInt(999), 250, 8500, lokasi ,"Sardine","Canned"));
+		lokasi = admin.determineLocation("Frozen");
+		itemArray.add(new Item("01-02-2020", random.nextInt(999), 130, 30000, lokasi ,"Nugget","Frozen"));
+		lokasi = admin.determineLocation("Fruit");
+		itemArray.add(new Item("09-08-2020", random.nextInt(999), 2100, 12000, lokasi ,"Pisang","Fruit"));
+		lokasi = admin.determineLocation("Vegetable");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), 9000, 5000, lokasi ,"Kembang Kol","Vegetable"));
+		
+		adminArray.add(new Admin("Master", 001,"1234", true, 0,crrnDate, crrnDate ));
+		porterArray.add(new Porter("Mikhael", 0001, "1234", false, 0, crrnDate, crrnDate));
 		// Defaults Item
 		displayWelcome();
 	}
@@ -65,7 +78,7 @@ public class Main extends HelperItem {
 		crrnUserID = 0;
 		isCurrAdmin = false;
 		
-		String roleUser = "";
+		String roleUser = null;
 		boolean typeUser;
 		String namaUser;
 	//	char[] consolePass;
@@ -79,7 +92,7 @@ public class Main extends HelperItem {
 		do {
 			do {
 				System.out.printf("What's your role [Admin | Porter]? ");
-				roleUser = scanner.nextLine();
+				roleUser = scanner.next();
 				if(!(roleUser.equals("Admin")|| roleUser.equals("Porter"))) {
 					System.out.println("Invalid Role!");
 				}
@@ -90,9 +103,9 @@ public class Main extends HelperItem {
 			else 
 				typeUser = false;
 			System.out.printf("Username: ");
-			namaUser = scanner.nextLine();
+			namaUser = scanner.next();
 			System.out.printf("Password: ");
-			passwordUser = scanner.nextLine();
+			passwordUser = scanner.next();
 	//      namaUser = console.readLine("Username: ");
 	//		consolePass = console.readPassword("Password: ");
 	//		passwordUser = String.valueOf(consolePass);
@@ -109,7 +122,6 @@ public class Main extends HelperItem {
 		isCurrAdmin = typeUser;
 		crrnUserIndex = indexTemp;
 		if (isCurrAdmin == true) {
-		
 			crrnUserID = adminArray.get(crrnUserIndex).getId();
 			crrnUsername = 	adminArray.get(crrnUserIndex).getNama();
 			//String nama, int id, String password, boolean accountType, int numberOfTransaction, String joinDate,String lastAccessDate
@@ -118,7 +130,7 @@ public class Main extends HelperItem {
 		}else {
 			crrnUserID = porterArray.get(crrnUserIndex).getId();
 			crrnUsername = 	porterArray.get(crrnUserIndex).getNama();
-			adminArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, passwordUser, isCurrAdmin,porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
+			porterArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, passwordUser, isCurrAdmin,porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
 					crrnDate));
 		}
 		System.out.println("Successfully logged in!");
@@ -152,17 +164,17 @@ public class Main extends HelperItem {
 		return index;
 	}
 	
-
+	
 	// Main Menu Function
 	// ================= 
 	// Internal Params: pilihan digunakan sebagai variable untuk menenutkan index mana yang user sentuh.
 	private void mainMenu() {
 		int pilihan = 0;
 		do {
-			System.out.println("\n=========================================================================================================");
+			System.out.println("\n===========================================================================================================");
 			System.out.println("     				  ***Inventory Gudang Sembako***\n");
 			System.out.printf("Welcome, Mr. /Mrs. %s\n", crrnUsername);
-			System.out.println("=========================================================================================================");
+			System.out.println("===========================================================================================================");
 			printInventory();
 			System.out.println("1. Add Item");
 			System.out.println("2. Remove Item");
@@ -170,15 +182,15 @@ public class Main extends HelperItem {
 			System.out.println("4. Search Item");
 			System.out.println("5. Scan Barcode for taking item");
 			System.out.println("6. Print List of Transtaction");
-			System.out.println("7. Account Settings");
-			System.out.println("8. Switch Account");
-			System.out.println("9. Exit");
+			System.out.println("7. Relocate Item");
+			System.out.println("8. Account Settings");
+			System.out.println("9. Switch Account");
+			System.out.println("10. Exit");
 			System.out.printf("Choice >> ");
 			
 			//Rubah scan pilihan jadi pakai fungsi, buat mencegah invalid input
 			pilihan = scanInt();
 			switch (pilihan) {
-			
 			//Add item
 			case 1: 
 				if (isCurrAdmin == true) {
@@ -188,12 +200,17 @@ public class Main extends HelperItem {
 					int quantity;
 					int price;
 					int expiredLength;
+					int nameLength;
 					String expired;
 					String lokasi;
 					
-					System.out.printf("Enter Item name: ");
-					namaBarang = scanner.nextLine();
+					do {
+						System.out.printf("Enter Item name: ");
+						namaBarang = scanner.nextLine();
+						nameLength = namaBarang.length();
+					}while((nameLength==0));
 					
+	
 					do {
 						System.out.printf("Enter Item category [Vegetable | Canned | Frozen | Fruit]: ");
 						typeBarang = scanner.nextLine();
@@ -248,15 +265,16 @@ public class Main extends HelperItem {
 					//Tambahkan transaksi ini ke array dan increment crrnTransactionID
 					transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
 							isCurrAdmin, ("Add itemID = " + idBarang + " with quantity " + quantity),
-							crrnDate));
+							crrnDateWM));
 					crrnTransactionID++;
-					
+					addTransaction();
 					System.out.println("Item added succesfully!");
 				}else {
 					System.out.println("Access Prohibited!");
 				}
-				
+				System.out.println("Press Any Key to Continue...");
 				scanner.nextLine();
+			
 				break;
 				
 			//Remove item
@@ -265,7 +283,6 @@ public class Main extends HelperItem {
 					
 					//Cek dulu listnya kosong gak
 					if (!(itemArray.isEmpty())) {
-
 						int idBarang;
 						Item itemToRemove;
 
@@ -280,13 +297,11 @@ public class Main extends HelperItem {
 						itemArray.remove(itemToRemove);
 						transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
 								isCurrAdmin, ("Remove itemID = " + idBarang),
-								crrnDate));
+								crrnDateWM));
 						crrnTransactionID++;
-						
+						addTransaction();
 						System.out.println("Successfully removed item!");
-					}
-
-					else {
+					}else {
 						System.out.println("There's no item in inventory!");
 					}
 
@@ -295,6 +310,7 @@ public class Main extends HelperItem {
 				}
 				
 				//Biar sebelum ke-print looping selanjutnya, keliatan messagenya
+				System.out.println("Press Any Key to Continue...");
 				scanner.nextLine();
 				break;
 				
@@ -336,9 +352,9 @@ public class Main extends HelperItem {
 							itemToRestock.setQuantity(itemToRestock.getQuantity() + quantityRestock);
 							transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
 									isCurrAdmin, ("Restock itemID = " + idBarang + " with quantity " + quantityRestock),
-									crrnDate));
+									crrnDateWM));
 							crrnTransactionID++;
-							
+							addTransaction();
 							System.out.println("Successfully restock item!");
 						}
 					}
@@ -350,14 +366,31 @@ public class Main extends HelperItem {
 				}else {
 					System.out.println("Access Prohibited!");
 				}
-				
+				System.out.println("Press Any Key to Continue...");
 				scanner.nextLine();
 				break;
 			case 4:
+				
+				if (itemArray.isEmpty() == false) {
+					Item itemToSearch;
+					itemToSearch = determineSearch();
+					System.out.println("\n+====================================+");
+					System.out.printf("|Name: %-30s|\n", itemToSearch.getNama());
+					System.out.printf("|ID: %-32s|\n", itemToSearch.getIdItem());
+					System.out.printf("|Category: %-26s|\n", itemToSearch.getType());
+					System.out.printf("|Price: Rp. %-25d|\n", itemToSearch.getHarga());
+					System.out.printf("|Quantity: %-26d|\n", itemToSearch.getQuantity());
+					System.out.printf("|Location: %-26s|\n", itemToSearch.getLokasi());
+					System.out.println("+====================================+");
+				}else {
+					System.out.println("There's no item in inventory!");
+				}
+				
+				scanner.nextLine();
+				System.out.println("Press Any Key to Continue...");
 				break;
 			case 5:
 				if (!itemArray.isEmpty()) {
-					
 					int idBarang;
 					int quantityAmbil;
 					Item itemToTake;
@@ -388,39 +421,139 @@ public class Main extends HelperItem {
 						itemToTake.setQuantity(itemToTake.getQuantity() - quantityAmbil);
 						transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
 								isCurrAdmin, ("Take itemID = " + idBarang + " with quantity " + quantityAmbil),
-								crrnDate));
+								crrnDateWM));
 						crrnTransactionID++;
-						
+						//Tambahkan jumlah transaction per user
+						addTransaction();
 						System.out.println("Successfully take item!");
 					}
-				}
-				
-				else {
+				}else {
 					System.out.println("There's no item in inventory!");
 				}
-				
+				System.out.println("Press Any Key to Continue...");
 				scanner.nextLine();
 				break;
 			case 6:
 				if (!transactionArray.isEmpty()) {
 					
 					//Cek dulu apakah akun ini admin/bukan
-					if (isCurrAdmin)
+					if (isCurrAdmin) {
+						System.out.println("");
 						admin.printTransactionList(crrnUsername, transactionArray);
-					else 
+					}else 
 						porter.printTransactionList(crrnUsername, transactionArray);
 				}
 				
 				else {
 					System.out.println("There's no transaction to show!");
 				}
-				
+				System.out.println("\nPress Any Key to Continue...");
 				scanner.nextLine();
 				break;
 			case 7:
-				accountMenu();
+				if (itemArray.isEmpty()==false){
+					Item itemToSearch;
+					String category;
+					String lokasiInput = "";
+					int nomorLokasi    = 0;
+					itemToSearch = determineSearch();
+					category = itemToSearch.getType();
+					
+				    String[] buahLokasi = {"Shelf A", "Shelf B", "Shelf X", "Shelf D", "Shelf I"};
+				    String[] cannedLokasi = {"Shelf C", "Shelf K", "Shelf E", "Shelf F", "Shelf L"};
+					String[] chillerLokasi = {"Chiller A", "Chiller B", "Chiller C", "Chiller D"};
+					
+					
+//					if(category.equals("Vegetable")) {
+//						location = chillerLokasi[random.nextInt(2)] + random.nextInt(100);
+//					}else if (category.equals("Canned")) {
+//						location = cannedLokasi[random.nextInt(5)] + random.nextInt(100);
+//					}else if (category.equals("Frozen")) {
+//						location = chillerLokasi[random.nextInt(2)+2] + random.nextInt(100);
+//					}else if (category.equals("Fruit")) {
+//						location = buahLokasi[random.nextInt(5)] + random.nextInt(100);
+//					}
+				
+					// random.nextInt hanya untuk membuat nilai shelf acak, jadi jangan terlalu dipikirin,
+					// untuk chillerLokasi, untuk frozen hanya bisa mengambil chiller c - d, sedangkan canned bisa dari a - b
+//				    String[] buahLokasi = {"Shelf A", "Shelf B", "Shelf X", "Shelf D", "Shelf I"};
+//				    String[] cannedLokasi = {"Shelf C", "Shelf K", "Shelf E", "Shelf F", "Shelf L"};
+//					String[] chillerLokasi = {"Chiller A", "Chiller B", "Chiller C", "Chiller D"};
+					
+					if (category.equals("Vegetable")) {
+						do {
+							do {
+								System.out.printf("Enter Shelf/Chiller Position [1-100]: ");
+								nomorLokasi = scanner.nextInt();
+								
+							}while(!(nomorLokasi>=1 && nomorLokasi <= 100));
+
+							System.out.printf("Enter Which Self [Chiller A | Chiller B]: ");
+							lokasiInput = scanner.next(); 
+							if(!(lokasiInput.equals("Chiller A") || lokasiInput.equals("Chiller B"))) {
+								System.out.println("Invalid Shelf!");
+							}
+							
+						}while(!(lokasiInput.equals("Chiller A") || lokasiInput.equals("Chiller B")));
+					}else if (category.equals("Fruit")) {
+						do {
+							do {
+								System.out.printf("Enter Shelf/Chiller Position [1-100]: ");
+								nomorLokasi = scanner.nextInt();
+								
+							}while(!(nomorLokasi>=1 && nomorLokasi <= 100));
+
+							System.out.printf("Enter Which Self [Shelf A | Shelf B | Shelf X | Shelf D | Shelf I]: ");
+							lokasiInput = scanner.next(); 
+							if(!(lokasiInput.equals("Shelf A") || lokasiInput.equals("Shelf B") || lokasiInput.equals("Shelf X") 
+									|| lokasiInput.equals("Shelf D") || lokasiInput.equals("Shelf I"))) {
+								System.out.println("Invalid Shelf!");
+							}
+						}while(!(lokasiInput.equals("Shelf A") || lokasiInput.equals("Shelf B") || lokasiInput.equals("Shelf X") 
+								|| lokasiInput.equals("Shelf D") || lokasiInput.equals("Shelf I")));
+						
+					}else if (category.equals("Canned")) {
+						do {
+							do {
+								System.out.printf("Enter Shelf/Chiller Position [1-100]: ");
+								nomorLokasi = scanner.nextInt();
+								
+							}while(!(nomorLokasi>=1 && nomorLokasi <= 100));
+
+							System.out.printf("Enter Which Self [Shelf C | Shelf K | Shelf E | Shelf F | Shelf L]: ");
+							lokasiInput = scanner.next(); 
+							if(!(lokasiInput.equals("Shelf C") || lokasiInput.equals("Shelf K") || lokasiInput.equals("Shelf E") 
+									|| lokasiInput.equals("Shelf F") || lokasiInput.equals("Shelf L"))) {
+								System.out.println("Invalid Shelf!");
+							}
+						}while(!(lokasiInput.equals("Shelf A") || lokasiInput.equals("Shelf B") || lokasiInput.equals("Shelf X") 
+								|| lokasiInput.equals("Shelf D") || lokasiInput.equals("Shelf I")));
+					}else if (category.equals("Frozen")) {
+						do {
+							do {
+								System.out.printf("Enter Shelf/Chiller Position [1-100]: ");
+								nomorLokasi = scanner.nextInt();
+								
+							}while(!(nomorLokasi>=1 && nomorLokasi <= 100));
+
+							System.out.printf("Enter Which Self [Chiller C | Chiller D]: ");
+							lokasiInput = scanner.next(); 
+							if(!(lokasiInput.equals("Chiller C") || lokasiInput.equals("Chiller D"))) {
+								System.out.println("Invalid Shelf!");
+							}
+						}while(!(lokasiInput.equals("Chiller C") || lokasiInput.equals("Chiller D")));
+					}
+					lokasiInput = lokasiInput + nomorLokasi;
+					itemToSearch.setLokasi(lokasiInput);
+					System.out.println("Location Updated!");
+					System.out.println("\nPress Any Key to Continue...");
+					scanner.nextLine();
+				}
 				break;
 			case 8:
+				accountMenu();
+				break;
+			case 9:
 				String state;
 				do {
 					System.out.printf("Are you sure [Y | N]? ");
@@ -433,43 +566,58 @@ public class Main extends HelperItem {
 					pilihan = 9;
 				}							
 				break;		
-			case 9:
+			case 10:
 				System.out.println("Thank you for using our companys app");
 				return;
 			default:
 				break;
 			}
-		}while(pilihan != 8);
+		}while(pilihan != 10);
 		
 	}
 	
 	private void printInventory() {
-		System.out.printf("| Item ID  |%10sName%10s|  Category  |  Quantity  |   Price   |  Expired   |%5sLokasi%5s|\n", "", "", "", "", "");
-		System.out.println("=========================================================================================================");
+		System.out.printf("| Item ID  |%10sName%10s|  Category  |  Quantity  |   Price   |  Expired   |%5sLocation%5s|\n", "", "", "", "", "");
+		System.out.println("===========================================================================================================");
 		for(int x = 0; x<itemArray.size(); x++) {
-			System.out.printf("|%-10d| %-23s| %-11s| %-10d | %-10d| %-11s| %-15s|\n", 
+			System.out.printf("|%-10d| %-23s| %-11s| %-10d | Rp.%-7d| %-11s| %-17s|\n", 
 					itemArray.get(x).getIdItem(), itemArray.get(x).getNama(), itemArray.get(x).getType()
 					,itemArray.get(x).getQuantity(), itemArray.get(x).getHarga(), itemArray.get(x).getExpired(), itemArray.get(x).getLokasi());
 		}
 		System.out.println("...");
-		System.out.println("=========================================================================================================");
+		System.out.println("===========================================================================================================");
 	}
 	
 	
 	private void accountMenu() {
 		int pilihan = 0;
 		do {
-			System.out.println("\n==============================================================================================");
+			System.out.println("=========================================================================================================");
 			System.out.println("     				  ***Inventory Gudang Sembako***\n");
 			System.out.printf("Welcome, Mr. /Mrs. %s\n", crrnUsername);
-			System.out.println("==============================================================================================");
+			if (isCurrAdmin == true) {
+				System.out.println("=========================================================================================================");
+				System.out.printf("|No. |Account Id |%10sName%11s|  Role   |  Transaction  |  Join Date  |  Last Access Date  |\n","", "","","","", "");
+				System.out.println("=========================================================================================================");
+				for(int x = 0; x<adminArray.size(); x++) {
+						System.out.printf("|%-3d |%-10d | %-23s |  Admin  | %-14d| %-11s | %-18s |\n", 
+								x+1,adminArray.get(x).getId(), adminArray.get(x).getNama(), adminArray.get(x).getNumberOfTransaction()
+								,adminArray.get(x).getJoinDate(), adminArray.get(x).getLastAccessDate());
+				}
+				int adminSize = adminArray.size()+1;
+				for(int x = 0; x<porterArray.size(); x++, adminSize++) {
+					System.out.printf("|%-3d |%-10d | %-23s |  Porter | %-14d| %-11s | %-18s |\n", 
+							adminSize, porterArray.get(x).getId(), porterArray.get(x).getNama(), porterArray.get(x).getNumberOfTransaction()
+							,porterArray.get(x).getJoinDate(), porterArray.get(x).getLastAccessDate());
+				}
+			}
+			System.out.println("=========================================================================================================");
 			System.out.println("1. Add User");
 			System.out.println("2. Remove User");
 			System.out.println("3. Change Password");
 			System.out.println("4. Go back");
 			System.out.printf("Choice >> ");
 			pilihan = scanner.nextInt();
-			
 			switch (pilihan) {
 			case 1:
 				// nama = variable sementara buat nama akun yang akan dibuat.
@@ -478,6 +626,7 @@ public class Main extends HelperItem {
 				String type;
 				boolean adminType;
 				int userID;
+				
 				if (isCurrAdmin == true) {
 					do {
 						do {
@@ -521,26 +670,27 @@ public class Main extends HelperItem {
 					// adminSize digunakan untuk melanjutkan nomor dari looping admin sebelumnya ke porter array
 					// totalUser = jumlah pertambahan admin.size + porter.size digunakan sebagai batasan pilihan user
 					// Condition = digunkana untuk menentukan apakah user yakin atau tdk saat menghapus item
+					
 					int choose;
-					int adminSize = adminArray.size()+1;
 					int totalUser =  adminArray.size()+porterArray.size();
 					String condition;
+					
 					do {
-						System.out.println("==============================================================================================");
-						System.out.println("No. |Item Id | Name	  | Role   |   Transactions   |    Join Date	| Last Access Date   |");
-						System.out.println("==============================================================================================");
+						System.out.println("=========================================================================================================");
+						System.out.printf("|No. |Account Id |%10sName%11s|  Role   |  Transaction  |  Join Date  |  Last Access Date  |\n","", "","","","", "");
+						System.out.println("=========================================================================================================");
 						for(int x = 0; x<adminArray.size(); x++) {
-								System.out.printf("|%d  |%d      | %s   | Admin | %d              | %s     | %s       |\n", 
+								System.out.printf("|%-3d |%-10d | %-23s |  Admin  | %-14d| %-11s | %-18s |\n", 
 										x+1,adminArray.get(x).getId(), adminArray.get(x).getNama(), adminArray.get(x).getNumberOfTransaction()
 										,adminArray.get(x).getJoinDate(), adminArray.get(x).getLastAccessDate());
 						}
-		
-						for(int x = 0; x<porterArray.size(); x++, adminSize++) {
-							System.out.printf("|%d  |%d      | %s    | Porter | %d              | %s     | %s       |\n", 
-									adminSize, porterArray.get(x).getId(), porterArray.get(x).getNama(), porterArray.get(x).getNumberOfTransaction()
+						int adminSiz = adminArray.size()+1;
+						for(int x = 0; x<porterArray.size(); x++, adminSiz++) {
+							System.out.printf("|%-3d |%-10d | %-23s |  Porter | %-14d| %-11s | %-18s |\n", 
+									adminSiz, porterArray.get(x).getId(), porterArray.get(x).getNama(), porterArray.get(x).getNumberOfTransaction()
 									,porterArray.get(x).getJoinDate(), porterArray.get(x).getLastAccessDate());
 						}
-						System.out.println("==============================================================================================");
+						System.out.println("=========================================================================================================");
 				
 						System.out.printf("Choose which user wanted to be remove [1 - %d]: ", totalUser);
 						choose = scanner.nextInt();
@@ -617,12 +767,12 @@ public class Main extends HelperItem {
 	
 	//Mark: - Change Password Function
 	//==================================
-	//Params: oldPass, newPass
+	//Params : oldPass, newPass
 	//oldPass: password lama yang diberikan user
 	//newPass: password baru yang diberikan user 
 	//==================================
 	//internal Params
-	//State : nilai yang akan di return, jika nilai pass yang lama benar dengan database maka baru diizinkan merubah pass.
+	//State  : nilai yang akan di return, jika nilai pass yang lama benar dengan database maka baru diizinkan merubah pass.
 	private boolean changePassword(String oldPass, String newPass) {
 		boolean state = false;
 		if (isCurrAdmin == true) {
@@ -646,7 +796,6 @@ public class Main extends HelperItem {
 		}
 		return state;
 	}
-	
 	
 	//Scan integer function
 	//=================================
@@ -680,5 +829,83 @@ public class Main extends HelperItem {
 			}
 		}
 		return itemFound;
+	}
+	
+	//Search item function
+	//=================================
+	//Params: nama
+	//nama: nama yang diberikan user
+	//=================================
+	//internal Params
+	//itemFound : item yang akan di return, jika item tidak ketemu, return item tanpa isi (null) 
+	private Item searchItemByName(String nama) {
+		Item itemFound = null;
+		for (Item currentItem: itemArray) {
+			if (currentItem.getNama().equals(nama)) {
+				itemFound = currentItem;
+				break;
+			}
+		}
+		return itemFound;
+	}
+	//Add Transaction
+	//================================
+	//menambahkan jumlah transaksi user
+	private void addTransaction() {
+		if (isCurrAdmin == true) {
+			adminArray.set(crrnUserIndex, new Admin(crrnUsername, crrnUserID, adminArray.get(crrnUserIndex).getPassword(), isCurrAdmin, (adminArray.get(crrnUserIndex).getNumberOfTransaction()+1), adminArray.get(crrnUserIndex).getJoinDate(), 
+					adminArray.get(crrnUserIndex).getLastAccessDate()));
+		}else {
+			porterArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, porterArray.get(crrnUserIndex).getPassword(), isCurrAdmin, (porterArray.get(crrnUserIndex).getNumberOfTransaction()+1), porterArray.get(crrnUserIndex).getJoinDate(), 
+					porterArray.get(crrnUserIndex).getLastAccessDate()));
+		}
+	}
+	
+	private Item determineSearch() {
+		String pencarian;
+		boolean typePencarian = false;
+		int ID;
+		String nama;
+		Item itemToSearch = null;
+		
+		do {
+			System.out.println("Press N to cancel");
+			System.out.printf("Search item by [ID | Name]? ");
+			
+			pencarian = scanner.next();
+			if (!(pencarian.equals("ID") || pencarian.equals("Name"))) {
+				if (pencarian.equals("N")) {
+					mainMenu();
+				}else {
+					System.out.println("Invalid Selection");
+				}
+			}else if (pencarian.equals("ID")) {
+				typePencarian = true;
+			}else if (pencarian.equals("Name")) {
+				typePencarian = false;
+			}
+		}while(!(pencarian.equals("ID") || pencarian.equals("Name")));
+		
+		do {
+			if (typePencarian == true) {
+				System.out.printf("Enter Product's ID: ");
+				ID = scanInt();
+				itemToSearch = searchItemByID(ID);
+			}else {
+				System.out.println("Press N to cancel");
+				System.out.printf("Enter Product's name: ");
+				nama = scanner.next();
+				if (nama.equals("N")) {
+					mainMenu();
+				}
+				itemToSearch = searchItemByName(nama);
+			}
+			
+			if (itemToSearch == null) {
+				System.out.println("Item doesn't exist!\nInvalid ID or Name..");
+			}
+		}while(itemToSearch == null);
+		
+		return itemToSearch;
 	}
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import oopFinalPkg.Model.Transaction;
 
-public class Porter extends Admin implements PersonHelper{
+public class Porter extends Person implements PersonHelper{
 
 	
 

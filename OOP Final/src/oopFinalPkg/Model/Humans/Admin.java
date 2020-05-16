@@ -22,11 +22,11 @@ public class Admin extends Person implements PersonHelper{
 	public String determineLocation(String category) {
 		String location = "";
 		if(category.equals("Vegetable")) {
-			location = chillerLokasi[random.nextInt(2)] + random.nextInt(50);
+			location = chillerLokasi[random.nextInt(2)] + random.nextInt(100);
 		}else if (category.equals("Canned")) {
 			location = cannedLokasi[random.nextInt(5)] + random.nextInt(100);
 		}else if (category.equals("Frozen")) {
-			location = chillerLokasi[random.nextInt(2)+2] + random.nextInt(50);
+			location = chillerLokasi[random.nextInt(2)+2] + random.nextInt(100);
 		}else if (category.equals("Fruit")) {
 			location = buahLokasi[random.nextInt(5)] + random.nextInt(100);
 		}
