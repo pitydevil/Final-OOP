@@ -1,8 +1,11 @@
 package oopFinalPkg.Model.Humans;
 
-public interface PersonHelper {
+import java.util.ArrayList;
 
-	public abstract void printTransactionList(String nama);
+import oopFinalPkg.Model.Transaction;
+
+public interface PersonHelper {
+	public abstract void printTransactionList(String nama, ArrayList<Transaction> transactionArray);
 	public abstract void relocate(String nama);
 	public abstract String determineLocation (String category);
 }

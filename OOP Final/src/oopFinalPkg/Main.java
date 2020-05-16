@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import oopFinalPkg.Model.HelperItem;
 import oopFinalPkg.Model.Item;
+import oopFinalPkg.Model.Transaction;
 import oopFinalPkg.Model.Humans.Admin;
 import oopFinalPkg.Model.Humans.Porter;
 
@@ -25,6 +26,7 @@ public class Main extends HelperItem {
 	private int crrnUserID;
 	private boolean isCurrAdmin;
 	private int crrnUserIndex;
+	private int crrnTransactionID = 1;
 	private Console console = System.console();
 	
 //	protected Admin admin = new Admin("",0,"",false);
@@ -77,20 +79,20 @@ public class Main extends HelperItem {
 		do {
 			do {
 				System.out.printf("What's your role [Admin | Porter]? ");
-				roleUser = scanner.next();
+				roleUser = scanner.nextLine();
 				if(!(roleUser.equals("Admin")|| roleUser.equals("Porter"))) {
 					System.out.println("Invalid Role!");
 				}
-			}while(!(roleUser.equals("Admin")|| roleUser.equals("Porter")));
+			} while(!(roleUser.equals("Admin")|| roleUser.equals("Porter")));
 			
 			if (roleUser.equals("Admin"))
 				typeUser = true;
 			else 
 				typeUser = false;
 			System.out.printf("Username: ");
-			namaUser = scanner.next();
+			namaUser = scanner.nextLine();
 			System.out.printf("Password: ");
-			passwordUser = scanner.next();
+			passwordUser = scanner.nextLine();
 	//      namaUser = console.readLine("Username: ");
 	//		consolePass = console.readPassword("Password: ");
 	//		passwordUser = String.valueOf(consolePass);
@@ -116,7 +118,7 @@ public class Main extends HelperItem {
 		}else {
 			crrnUserID = porterArray.get(crrnUserIndex).getId();
 			crrnUsername = 	porterArray.get(crrnUserIndex).getNama();
-			adminArray.set(crrnUserIndex, new Admin(crrnUsername, crrnUserID, passwordUser, isCurrAdmin,porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
+			adminArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, passwordUser, isCurrAdmin,porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
 					crrnDate));
 		}
 		System.out.println("Successfully logged in!");
@@ -157,10 +159,10 @@ public class Main extends HelperItem {
 	private void mainMenu() {
 		int pilihan = 0;
 		do {
-			System.out.println("\n==============================================================================================");
+			System.out.println("\n=========================================================================================================");
 			System.out.println("     				  ***Inventory Gudang Sembako***\n");
 			System.out.printf("Welcome, Mr. /Mrs. %s\n", crrnUsername);
-			System.out.println("==============================================================================================");
+			System.out.println("=========================================================================================================");
 			printInventory();
 			System.out.println("1. Add Item");
 			System.out.println("2. Remove Item");
@@ -172,9 +174,13 @@ public class Main extends HelperItem {
 			System.out.println("8. Switch Account");
 			System.out.println("9. Exit");
 			System.out.printf("Choice >> ");
-			pilihan = scanner.nextInt();
+			
+			//Rubah scan pilihan jadi pakai fungsi, buat mencegah invalid input
+			pilihan = scanInt();
 			switch (pilihan) {
-			case 1:
+			
+			//Add item
+			case 1: 
 				if (isCurrAdmin == true) {
 					String namaBarang;
 					int idBarang;
@@ -186,11 +192,11 @@ public class Main extends HelperItem {
 					String lokasi;
 					
 					System.out.printf("Enter Item name: ");
-					namaBarang = scanner.next();
+					namaBarang = scanner.nextLine();
 					
 					do {
 						System.out.printf("Enter Item category [Vegetable | Canned | Frozen | Fruit]: ");
-						typeBarang = scanner.next();
+						typeBarang = scanner.nextLine();
 						
 						if (!(typeBarang.equals("Vegetable") ||typeBarang.equals("Canned") ||typeBarang.equals("Frozen") ||typeBarang.equals("Fruit"))) {
 							System.out.println("Invalid category!");
@@ -199,7 +205,7 @@ public class Main extends HelperItem {
 					
 					do {
 						System.out.printf("Enter item price [1000 - 500000]: ");
-						price = scanner.nextInt();
+						price = scanInt();
 						if (!(price >= 1000 && price <= 500000)) {
 							System.out.println("Invalid price!");
 						}
@@ -207,50 +213,209 @@ public class Main extends HelperItem {
 					
 					do {
 						System.out.printf("Enter item quantity [1 -  10000]: ");
-						quantity = scanner.nextInt();
+						quantity = scanInt();
 						if(!(quantity >= 1 && quantity <= 10000)) {
 							System.out.println("Invalid quantity!");
 						}
 					}while(!(quantity >= 1 && quantity <= 10000));
 					
+					//Reminder utk tambah date validation
 					do {
 						System.out.printf("Enter item expire date [DD-MM-YYYY]: ");
-						expired = scanner.next();
+						expired = scanner.nextLine();
 						expiredLength = expired.length();
 
 						if (!(expiredLength == 10)) {
 							System.out.println("Invalid date format!");
 						}
 					}while(!(expiredLength == 10));
-					idBarang = random.nextInt(999);
+					
+					//Buat ngecek dulu, apakah itemID tersebut udah ada di listnya
+					boolean itemAlreadyExist = false;
+					do {
+						idBarang = random.nextInt(999);
+						Item cekItemIDSudahAda = searchItemByID(idBarang);
+						if (cekItemIDSudahAda != null)
+							itemAlreadyExist = true;
+					} while (itemAlreadyExist);
+					
 					lokasi  =  admin.determineLocation(typeBarang);
 
 					//String expired, int idItem, int quantity, int harga, String lokasi, String nama, String type
 					itemArray.add(new Item(expired, idBarang, quantity, price, lokasi, namaBarang, typeBarang));
+					
+					//int transactionID, String transUsername, boolean accountType, String transDescription, String transDate
+					//Tambahkan transaksi ini ke array dan increment crrnTransactionID
+					transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
+							isCurrAdmin, ("Add itemID = " + idBarang + " with quantity " + quantity),
+							crrnDate));
+					crrnTransactionID++;
+					
 					System.out.println("Item added succesfully!");
 				}else {
 					System.out.println("Access Prohibited!");
 				}
+				
+				scanner.nextLine();
 				break;
+				
+			//Remove item
 			case 2:
 				if (isCurrAdmin == true) {
 					
+					//Cek dulu listnya kosong gak
+					if (!(itemArray.isEmpty())) {
+
+						int idBarang;
+						Item itemToRemove;
+
+						do {
+							System.out.print("Enter valid Item ID: ");
+							idBarang = scanInt();
+							itemToRemove = searchItemByID(idBarang);
+							if (itemToRemove == null)
+								System.out.println("Item doesn't exist!");
+						} while (itemToRemove == null);
+
+						itemArray.remove(itemToRemove);
+						transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
+								isCurrAdmin, ("Remove itemID = " + idBarang),
+								crrnDate));
+						crrnTransactionID++;
+						
+						System.out.println("Successfully removed item!");
+					}
+
+					else {
+						System.out.println("There's no item in inventory!");
+					}
+
 				}else {
 					System.out.println("Access Prohibited!");
 				}
+				
+				//Biar sebelum ke-print looping selanjutnya, keliatan messagenya
+				scanner.nextLine();
 				break;
+				
+			//Restock Item
 			case 3:
 				if (isCurrAdmin == true) {
+					
+					//Cek dulu listnya kosong gak
+					if (!(itemArray.isEmpty())) {
+
+						int idBarang;
+						int quantityRestock;
+						Item itemToRestock;
+						
+						do {
+							System.out.print("Enter valid Item ID: ");
+							idBarang = scanInt();
+							itemToRestock = searchItemByID(idBarang);
+							if (itemToRestock == null)
+								System.out.println("Item doesn't exist!");
+						} while (itemToRestock == null);
+						
+						//Dibuat begini, karena inventory kita limitnya cuman sampai 10000 
+						//quantity per ItemID, jadi user hanya bisa restock sampai maximal 10000
+						int limitRestock = (10000) - itemToRestock.getQuantity();
+						
+						if (limitRestock == 0) 
+							System.out.println("This item has reached max quantity!");
+						else {
+							do {
+								System.out.printf("Enter quantity to restock [1 - %d]: ", limitRestock);
+								quantityRestock = scanInt();
+								if (!(quantityRestock >= 1 && quantityRestock <= limitRestock))
+									System.out.println("Invalid restock value!");
+							} while (!(quantityRestock >= 1 && quantityRestock <= limitRestock));
+							
+							//Tambahkan quantity item yang mau di restock,
+							//kemudian masukkan juga transaksi ini ke transactionArray
+							itemToRestock.setQuantity(itemToRestock.getQuantity() + quantityRestock);
+							transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
+									isCurrAdmin, ("Restock itemID = " + idBarang + " with quantity " + quantityRestock),
+									crrnDate));
+							crrnTransactionID++;
+							
+							System.out.println("Successfully restock item!");
+						}
+					}
+
+					else {
+						System.out.println("There's no item in inventory!");
+					}
 					
 				}else {
 					System.out.println("Access Prohibited!");
 				}
+				
+				scanner.nextLine();
 				break;
 			case 4:
 				break;
 			case 5:
+				if (!itemArray.isEmpty()) {
+					
+					int idBarang;
+					int quantityAmbil;
+					Item itemToTake;
+					
+					do {
+						System.out.print("Enter valid Item ID: ");
+						idBarang = scanInt();
+						itemToTake = searchItemByID(idBarang);
+						if (itemToTake == null)
+							System.out.println("Item doesn't exist!");
+					} while (itemToTake == null);
+					
+					//Maksimal quantity yang bisa diambil
+					int limitTake = itemToTake.getQuantity();
+					
+					if (limitTake == 0) 
+						System.out.println("This item is out of stock!");
+					else {
+						do {
+							System.out.printf("Enter quantity to take [1 - %d]: ", limitTake);
+							quantityAmbil = scanInt();
+							if (!(quantityAmbil >= 1 && quantityAmbil <= limitTake))
+								System.out.println("Invalid take value!");
+						} while (!(quantityAmbil >= 1 && quantityAmbil <= limitTake));
+						
+						//Rubah quantity item yang diambil,
+						//kemudian masukkan juga transaksi ini ke transactionArray
+						itemToTake.setQuantity(itemToTake.getQuantity() - quantityAmbil);
+						transactionArray.add(new Transaction(crrnTransactionID, crrnUsername, 
+								isCurrAdmin, ("Take itemID = " + idBarang + " with quantity " + quantityAmbil),
+								crrnDate));
+						crrnTransactionID++;
+						
+						System.out.println("Successfully take item!");
+					}
+				}
+				
+				else {
+					System.out.println("There's no item in inventory!");
+				}
+				
+				scanner.nextLine();
 				break;
 			case 6:
+				if (!transactionArray.isEmpty()) {
+					
+					//Cek dulu apakah akun ini admin/bukan
+					if (isCurrAdmin)
+						admin.printTransactionList(crrnUsername, transactionArray);
+					else 
+						porter.printTransactionList(crrnUsername, transactionArray);
+				}
+				
+				else {
+					System.out.println("There's no transaction to show!");
+				}
+				
+				scanner.nextLine();
 				break;
 			case 7:
 				accountMenu();
@@ -279,15 +444,15 @@ public class Main extends HelperItem {
 	}
 	
 	private void printInventory() {
-		System.out.println("|Item Id | Name	|   Category   |    Quantity	| Price  | Expired  | Lokasi  |");
-		System.out.println("==============================================================================================");
+		System.out.printf("| Item ID  |%10sName%10s|  Category  |  Quantity  |   Price   |  Expired   |%5sLokasi%5s|\n", "", "", "", "", "");
+		System.out.println("=========================================================================================================");
 		for(int x = 0; x<itemArray.size(); x++) {
-			System.out.printf("|%d      | %s   	| %s   | %d     | %d   | %s   | %s   |\n", 
+			System.out.printf("|%-10d| %-23s| %-11s| %-10d | %-10d| %-11s| %-15s|\n", 
 					itemArray.get(x).getIdItem(), itemArray.get(x).getNama(), itemArray.get(x).getType()
 					,itemArray.get(x).getQuantity(), itemArray.get(x).getHarga(), itemArray.get(x).getExpired(), itemArray.get(x).getLokasi());
 		}
 		System.out.println("...");
-		System.out.println("==============================================================================================");
+		System.out.println("=========================================================================================================");
 	}
 	
 	
@@ -483,4 +648,37 @@ public class Main extends HelperItem {
 	}
 	
 	
+	//Scan integer function
+	//=================================
+	//Purpose : memastikan input dari user berupa integer, jika input adalah karakter invalid,
+	//			return angka -1
+	private int scanInt() {
+		int scanNumber = -1;
+		try {
+			scanNumber = scanner.nextInt();
+		}
+		catch (Exception TypeMismatch) {
+			//System.out.println("Invalid input!");
+		}
+		scanner.nextLine();
+		return scanNumber;
+	}
+
+	//Search item function
+	//=================================
+	//Params: idBarang
+	//idBarang: idBarang yang diberikan user
+	//=================================
+	//internal Params
+	//itemFound : item yang akan di return, jika item tidak ketemu, return item tanpa isi (null) 
+	private Item searchItemByID(int idBarang) {
+		Item itemFound = null;
+		for (Item currentItem : itemArray) {
+			if (currentItem.getIdItem() == idBarang) {
+				itemFound = currentItem;
+				break;
+			}
+		}
+		return itemFound;
+	}
 }

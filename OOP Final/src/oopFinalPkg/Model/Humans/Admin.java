@@ -1,6 +1,9 @@
 package oopFinalPkg.Model.Humans;
 
-public class Admin extends Person  implements PersonHelper{
+import java.util.ArrayList;
+import oopFinalPkg.Model.Transaction;
+
+public class Admin extends Person implements PersonHelper{
 
 	
 	public Admin(String nama, int id, String password, boolean accountType, int numberOfTransaction, String joinDate,
@@ -18,7 +21,7 @@ public class Admin extends Person  implements PersonHelper{
 	@Override
 	public String determineLocation(String category) {
 		String location = "";
-		if(category.equals("Vegatable")) {
+		if(category.equals("Vegetable")) {
 			location = chillerLokasi[random.nextInt(2)] + random.nextInt(50);
 		}else if (category.equals("Canned")) {
 			location = cannedLokasi[random.nextInt(5)] + random.nextInt(100);
@@ -31,9 +34,10 @@ public class Admin extends Person  implements PersonHelper{
 	}
 
 	@Override
-	public void printTransactionList(String nama) {
-		// TODO Auto-generated method stub
-		
+	public void printTransactionList(String nama, ArrayList<Transaction> transactionArray) {
+		for (Transaction currTransactionItem : transactionArray) {
+			currTransactionItem.getTransactionInfo();
+		}
 	}
 
 	
