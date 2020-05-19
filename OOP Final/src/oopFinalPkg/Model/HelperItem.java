@@ -11,13 +11,17 @@ import oopFinalPkg.Model.Humans.Porter;
 
 public abstract class HelperItem {
 	
+	protected String crrnUsername;
+	protected int crrnUserID;
+	protected boolean isCurrAdmin;
+	protected int crrnUserIndex;
 	protected ArrayList<Item> itemArray = new ArrayList<Item>();
-	protected Random random = new Random();
+	protected final Random random = new Random();
 	protected ArrayList<Transaction> transactionArray = new ArrayList<Transaction>();
-	protected Scanner scanner = new Scanner(System.in);
-	protected String crrnDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-	protected String crrnDateWM = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+	protected final Scanner scanner = new Scanner(System.in);
+	protected final String crrnDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+	protected final String crrnDateWM = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
+	protected ArrayList<Admin> adminArray = new ArrayList<Admin>();
+	protected ArrayList<Porter> porterArray = new ArrayList<Porter>();
 
-	
-	
 }

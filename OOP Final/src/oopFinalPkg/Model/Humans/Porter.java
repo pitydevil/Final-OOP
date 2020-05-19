@@ -26,30 +26,20 @@ public class Porter extends Person implements PersonHelper{
 		}
 	}
 
-	
+
 	@Override
-	public void relocate(String nama) {
-		// TODO Auto-generated method stub
-		
-	}
-		
-	  private String[] buahLokasi = {"Shelf A", "Shelf B", "Shelf X", "Shelf D", "Shelf I"};
-	  private String[] cannedLokasi = {"Shelf C", "Shelf K", "Shelf E", "Shelf F", "Shelf L"};
-	  private String[] chillerLokasi = {"Chiller A", "Chiller B", "Chiller C", "Chiller D"};
-		
-	@Override
-	public String determineLocation(String category) {
-		String location = "";
-		if(category.equals("Vegetable")) {
-			location = chillerLokasi[random.nextInt(2)] + random.nextInt(50);
-		}else if (category.equals("Canned")) {
-			location = cannedLokasi[random.nextInt(5)] + random.nextInt(100);
-		}else if (category.equals("Frozen")) {
-			location = chillerLokasi[random.nextInt(2)+2] + random.nextInt(50);
-		}else if (category.equals("Fruit")) {
-			location = buahLokasi[random.nextInt(5)] + random.nextInt(100);
+	public boolean changePassword(String oldPass, String newPass) {
+		boolean state = false;
+		if(porterArray.get(crrnUserIndex).getPassword().equals(oldPass)==true) {
+			porterArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, newPass, isCurrAdmin, porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
+					porterArray.get(crrnUserIndex).getLastAccessDate()));
+			state = true;
+		}else {
+			state = false;
 		}
-		return location;
+		return false;
 	}
 
+
+	
 }
