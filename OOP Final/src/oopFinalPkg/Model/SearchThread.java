@@ -31,9 +31,4 @@ public class SearchThread extends Thread {
 	public void setItemFound(Item itemFound) {
 		this.itemFound = itemFound;
 	}
-	
-	
-
-	
-
 }

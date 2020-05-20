@@ -45,8 +45,25 @@ public class Main extends HelperItem {
 		itemArray.add(new Item("01-02-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(39999), lokasi ,"Nugget","Frozen"));
 		lokasi = admin.determineLocation("Fruit");
 		itemArray.add(new Item("09-08-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(14999), lokasi ,"Pisang","Fruit"));
-		lokasi = admin.determineLocation("Vegetable");
-		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Kembang Kol","Vegetable"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Indomie","Canned"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(19999), lokasi ,"Sosis","Canned"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Supermie","Canned"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(9999), lokasi ,"Gula","Canned"));
+		lokasi = admin.determineLocation("Fruit");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Jeruk Limau","Fruit"));
+		lokasi = admin.determineLocation("Fruit");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Apel","Fruit"));
+		lokasi = admin.determineLocation("Frozen");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(3999), lokasi ,"Fiest Nugget","Frozen"));
+		lokasi = admin.determineLocation("Canned");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(19999), lokasi ,"Botan Sardine","Canned"));
+		lokasi = admin.determineLocation("Frozen");
+		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(39999), lokasi ,"Premium Wagyu","Frozen"));
+	
 		
 		adminArray.add(new Admin("Master", 001,"1234", true, 0,crrnDate, crrnDate ));
 		porterArray.add(new Porter("Mikhael", 0002, "1234", false, 0, crrnDate, crrnDate));
@@ -147,13 +164,12 @@ public class Main extends HelperItem {
 	// Internal Params: pilihan digunakan sebagai variable untuk menenutkan index mana yang user sentuh.
 	private void mainMenu() {
 		int pilihan = 0;
-		System.out.println(crrnUserIndex);
 		do {
 			System.out.println(ZonedDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME));
-			System.out.println("\n===========================================================================================================");
+			System.out.println("\n============================================================================================================");
 			System.out.println("     				  ***Inventory Gudang Sembako***\n");
 			System.out.printf("Welcome, Mr. /Mrs. %s\n", crrnUsername);
-			System.out.println("===========================================================================================================");
+			System.out.println("============================================================================================================");
 			printInventory();
 			System.out.println("1. Add Item");
 			System.out.println("2. Remove Item");
@@ -178,11 +194,13 @@ public class Main extends HelperItem {
 					int price;
 					int nameLength;
 					boolean expiredLength = false;
+					boolean itemAlreadyExist = false;
+					boolean cancel = false;
 					String namaBarang;
 					String typeBarang;
 					String expired;
 					String lokasi;
-					
+				
 					do {
 						System.out.printf("Enter Item name (N to Cancel) : ");
 						namaBarang = scanner.nextLine();
@@ -238,7 +256,7 @@ public class Main extends HelperItem {
 					}while(!(expiredLength == true));
 					
 					//Buat ngecek dulu, apakah itemID tersebut udah ada di listnya
-					boolean itemAlreadyExist = false;
+			
 					do {
 						idBarang = random.nextInt(999);
 						Item cekItemIDSudahAda = searchItemByID(idBarang);
@@ -566,11 +584,12 @@ public class Main extends HelperItem {
 				break;		
 			case 10:
 				System.out.println("Thank you for using our companys app");
-				return;
+				System.exit(0);
 			default:
 				break;
 			}
 		}while(pilihan != 10);
+		return;
 		
 	}
 	private void accountMenu() {
@@ -782,14 +801,14 @@ public class Main extends HelperItem {
 	
 	private void printInventory() {
 		System.out.printf("| Item ID  |%10sName%10s|  Category  |  Quantity  |   Price    |  Expired   |%5sLocation%5s|\n", "", "", "", "", "");
-		System.out.println("===========================================================================================================");
+		System.out.println("============================================================================================================");
 		for(int x = 0; x<itemArray.size(); x++) {
 			System.out.printf("|%-10d| %-23s| %-11s| %-10d | Rp. %-7d| %-11s| %-17s|\n", 
 					itemArray.get(x).getIdItem(), itemArray.get(x).getNama(), itemArray.get(x).getType()
 					,itemArray.get(x).getQuantity(), itemArray.get(x).getHarga(), itemArray.get(x).getExpired(), itemArray.get(x).getLokasi());
 		}
 		System.out.println("...");
-		System.out.println("===========================================================================================================");
+		System.out.println("============================================================================================================");
 	}
 	
 	

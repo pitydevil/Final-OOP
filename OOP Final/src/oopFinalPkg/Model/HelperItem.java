@@ -23,5 +23,4 @@ public abstract class HelperItem {
 	protected final String crrnDateWM = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
 	protected ArrayList<Admin> adminArray = new ArrayList<Admin>();
 	protected ArrayList<Porter> porterArray = new ArrayList<Porter>();
-
 }
