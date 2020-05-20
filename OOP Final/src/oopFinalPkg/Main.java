@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import oopFinalPkg.Model.HelperItem;
 import oopFinalPkg.Model.Item;
+import oopFinalPkg.Model.Search;
 import oopFinalPkg.Model.Transaction;
 import oopFinalPkg.Model.Humans.Admin;
 import oopFinalPkg.Model.Humans.Porter;
@@ -48,7 +49,7 @@ public class Main extends HelperItem {
 		itemArray.add(new Item("13-04-2020", random.nextInt(999), random.nextInt(9999),random.nextInt(4999), lokasi ,"Kembang Kol","Vegetable"));
 		
 		adminArray.add(new Admin("Master", 001,"1234", true, 0,crrnDate, crrnDate ));
-		porterArray.add(new Porter("Mikhael", 0001, "1234", false, 0, crrnDate, crrnDate));
+		porterArray.add(new Porter("Mikhael", 0002, "1234", false, 0, crrnDate, crrnDate));
 		// Defaults Item
 		displayWelcome();
 	}
@@ -90,7 +91,7 @@ public class Main extends HelperItem {
 		do {
 			do {
 				System.out.printf("What's your role [Admin | Porter]? ");
-				roleUser = scanner.next();
+				roleUser = scanner.nextLine();
 				if(!(roleUser.equals("Admin")|| roleUser.equals("Porter"))) {
 					System.out.println("Invalid Role!");
 				}
@@ -101,12 +102,12 @@ public class Main extends HelperItem {
 			else 
 				typeUser = false;
 			System.out.printf("Username (N to Cancel): ");
-			namaUser = scanner.next();
+			namaUser = scanner.nextLine();
 			if (namaUser.equals("N")) {
 				displayWelcome();
 			}
 			System.out.printf("Password (N to Cancel): ");
-			passwordUser = scanner.next();
+			passwordUser = scanner.nextLine();
 			if (passwordUser.equals("N")) {
 				displayWelcome();
 			}
@@ -159,7 +160,7 @@ public class Main extends HelperItem {
 			System.out.println("3. Restock Item");
 			System.out.println("4. Search Item");
 			System.out.println("5. Scan Barcode for taking item");
-			System.out.println("6. Print List of Transtaction");
+			System.out.println("6. Print List of Transaction");
 			System.out.println("7. Relocate Item");
 			System.out.println("8. Account Settings");
 			System.out.println("9. Switch Account");
@@ -454,7 +455,7 @@ public class Main extends HelperItem {
 				
 					do {
 						System.out.printf("Enter Shelf/Chiller Position [1-100]: ");
-						nomorLokasi = scanner.nextInt();
+						nomorLokasi = scanInt();
 						
 					}while(!(nomorLokasi>=1 && nomorLokasi <= 100));
 					
@@ -518,10 +519,10 @@ public class Main extends HelperItem {
 					if (!(isCurrAdmin == true)) {
 						do {
 							System.out.println("Enter Admin's Credential!");
-							System.out.printf("Username (N to Cancel):  ");
-							namaUser = scanner.next();
+							System.out.printf("Username (N to Cancel): ");
+							namaUser = scanner.nextLine();
 							System.out.printf("Password (N to Cancel): ");
-							passwordUser = scanner.next();
+							passwordUser = scanner.nextLine();
 					//      namaUser = console.readLine("Username: ");
 					//		consolePass = console.readPassword("Password: ");
 					//		passwordUser = String.valueOf(consolePass);
@@ -554,7 +555,7 @@ public class Main extends HelperItem {
 				String state;
 				do {
 					System.out.printf("Are you sure [Y | N]? ");
-					state = scanner.next();
+					state = scanner.nextLine();
 				}while(!(state.equals("Y") || state.equals("N")));
 				if(state.equals("Y")) {
 					System.out.println("Logged off!\n");
@@ -600,7 +601,7 @@ public class Main extends HelperItem {
 			System.out.println("3. Change Password");
 			System.out.println("4. Go back");
 			System.out.printf("Choice >> ");
-			pilihan = scanner.nextInt();
+			pilihan = scanInt();
 			switch (pilihan) {
 			case 1:
 				// nama = variable sementara buat nama akun yang akan dibuat.
@@ -614,7 +615,7 @@ public class Main extends HelperItem {
 					do {
 						do {
 							System.out.printf("What's the role (N to Cancel) [Admin | Porter]? ");
-							type = scanner.next();
+							type = scanner.nextLine();
 							if(!(type.equals("Admin")==true || type.equals("Porter") == true)) {
 								if (type.equals("N")) {
 									accountMenu();
@@ -630,7 +631,7 @@ public class Main extends HelperItem {
 						}
 						do {
 							System.out.printf("Enter new username (N to Cancel) [5-15 Characters]: ");
-							nama = scanner.next();
+							nama = scanner.nextLine();
 							if (!(nama.length()>= 5 && nama.length()<= 15 )) {
 								if (nama.equals("N")) {
 									accountMenu();
@@ -641,7 +642,7 @@ public class Main extends HelperItem {
 						}while(!(nama.length()>= 5 && nama.length()<= 15 ));
 						
 						System.out.printf("Enter new password (N to Cancel) [>=4 Lengths]: ");
-						pass = scanner.next();
+						pass = scanner.nextLine();
 						
 						if (!(pass.length()>=4)) {
 							if (pass.equals("N")) {
@@ -651,7 +652,7 @@ public class Main extends HelperItem {
 							}
 						}
 					}while(!(pass.length()>=4));
-					//String nama, int id, String password, boolean accountType
+					//String nama, int id, String password, boolean accountType					
 					userID = random.nextInt(999);
 					if (adminType == true) {
 						adminArray.add(new Admin(nama, userID, pass, adminType, 0, crrnDate, crrnDate));
@@ -694,16 +695,25 @@ public class Main extends HelperItem {
 						System.out.println("=========================================================================================================");
 				
 						System.out.printf("Choose which user wanted to be remove [1 - %d]: ", totalUser);
-						choose = scanner.nextInt();
+						choose = scanInt();
 						if (!(choose >= 1 && choose <= totalUser)) {
 							System.out.println("Invalid Selection!");
 						}
+						
+						//Tambahan biar satu-satunya akun admin gak kehapus
+						//choose dibuat -1 biar loopnya ngulang aja, jadi programnya
+						//tanya lagi choose user nomor berapa
+						else if (choose-1 <= adminArray.size()-1 && adminArray.size() == 1) {
+							System.out.println("You can't delete the only admin account!");
+							choose = -1;
+						}
+						
 					}while(!(choose >= 1 && choose <= totalUser));
 					
 				
 					do {
 						System.out.printf("Are you sure [Y | N]? ");
-						condition = scanner.next();
+						condition = scanner.nextLine();
 					}while(!(condition.equals("Y") || condition.equals("N")));
 					if(condition.equals("Y")) {
 						choose = choose -1;
@@ -735,9 +745,9 @@ public class Main extends HelperItem {
 				//char[] consolePass;
 				do {
 					System.out.printf("Enter your current password: ");
-					currPass = scanner.next();
+					currPass = scanner.nextLine();
 					System.out.printf("Enter new password: ");
-					newPass = scanner.next();
+					newPass = scanner.nextLine();
 					if (isCurrAdmin == true) {
 						state = admin.changePassword(currPass, newPass);
 					}else {
@@ -757,7 +767,7 @@ public class Main extends HelperItem {
 				String condition;
 				do {
 					System.out.printf("Are you sure [Y | N]? ");
-					condition = scanner.next();
+					condition = scanner.nextLine();
 				}while(!(condition.equals("Y") || condition.equals("N")));
 				if(condition.equals("Y")) {
 					return;
@@ -816,16 +826,31 @@ public class Main extends HelperItem {
 	//=================================
 	//internal Params
 	//itemFound : item yang akan di return, jika item tidak ketemu, return item tanpa isi (null) 
+
+//	private Item searchItemByID(int idBarang) {
+//		Item itemFound = null;
+//		for (Item currentItem : itemArray) {
+//			if (currentItem.getIdItem() == idBarang) {
+//				itemFound = currentItem;
+//				break;
+//			}
+//		}
+//		return itemFound;
+//	}
+	
+	//Versi baru pakai multi threading
+	//================================
+	//Params : idBarang, yaitu idBarang yang mau disearch
+	//================================
+	//Buat instance dari class Search, dengan parameter 
 	private Item searchItemByID(int idBarang) {
 		Item itemFound = null;
-		for (Item currentItem : itemArray) {
-			if (currentItem.getIdItem() == idBarang) {
-				itemFound = currentItem;
-				break;
-			}
-		}
+		Search searchObj = new Search(itemArray, idBarang);
+		itemFound = searchObj.getItemFound();
 		return itemFound;
 	}
+	
+	
 	
 	//Search item function
 	//=================================
@@ -884,7 +909,7 @@ public class Main extends HelperItem {
 			}
 			
 			if (itemToSearch == null) {
-				System.out.println("Item doesn't exist!\nInvalid ID or Name..");
+				System.out.println("Item doesn't exist!\nInvalid ID or Name..\n");
 			}
 		}while(itemToSearch == null);
 		
