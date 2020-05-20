@@ -20,7 +20,7 @@ public class Transaction {
 	
 	//Untuk ngeprint log transactionnya
 	public void getTransactionInfo() {
-		System.out.print("[TransactionID: " + transactionID + "]" + transDescription + " by " + transUsername);
+		System.out.print("[TransactionID: " + transactionID + "] " + transDescription + " by " + transUsername);
 		if (accountType == true) 
 			System.out.print("(Admin)");
 		else
