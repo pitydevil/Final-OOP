@@ -2,16 +2,19 @@ package oopFinalPkg.Model;
 
 import java.util.List;
 
-public class SearchThread extends Thread {
+public class SearchThread implements Runnable {
 
 	private List<Item> array;
 	private int searchID;
 	private Item itemFound = null;
+	private Thread objectThread;
 	
 	public SearchThread(List<Item> array, int searchID) {
 		this.array = array;
 		this.searchID = searchID;
-		start();
+		
+		objectThread = new Thread(this);
+		objectThread.start();
 	}
 
 	@Override
@@ -22,6 +25,10 @@ public class SearchThread extends Thread {
 				break;
 			}
 		}
+	}
+	
+	public Thread getThread() {
+		return objectThread;
 	}
 
 	public Item getItemFound() {

@@ -14,21 +14,20 @@ public class Search {
 		SearchThread thread2 = new SearchThread(array.subList(size/2, size), searchID);
 	
 		try {
-			thread1.join();
-			thread2.join();
+			thread1.getThread().join();
+			thread2.getThread().join();
+			
+			//Jika tidak ketemu
+			if (thread1.getItemFound() == null && thread2.getItemFound() == null) {
+				setItemFound(null);
+			}
+			else {
+				itemFound = (thread1.getItemFound() != null) ? thread1.getItemFound() : thread2.getItemFound(); 
+			}
 		}
 		catch (InterruptedException e) {
 			System.out.println("Search thread interrupted!");
-		}
-
-		//Jika tidak ketemu
-		if (thread1.getItemFound() == null && thread2.getItemFound() == null) {
-			setItemFound(null);
-		}
-		else {
-			itemFound = (thread1.getItemFound() != null) ? thread1.getItemFound() : thread2.getItemFound(); 
-		}
-		
+		}		
 	}
 
 	public Item getItemFound() {
