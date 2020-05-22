@@ -517,8 +517,9 @@ public class Main extends HelperItem {
 									System.out.println("Invalid Shelf!");
 								}
 							}
-						}while(!(lokasiInput.equals("Shelf A") || lokasiInput.equals("Shelf B") || lokasiInput.equals("Shelf X") 
-								|| lokasiInput.equals("Shelf D") || lokasiInput.equals("Shelf I")));
+						}while(!(lokasiInput.equals("Shelf C") || lokasiInput.equals("Shelf K") || lokasiInput.equals("Shelf E") 
+								|| lokasiInput.equals("Shelf F") || lokasiInput.equals("Shelf L")));
+						
 					}else if (category.equals("Frozen")) {
 						do {
 							System.out.print("Enter Which Self (N to Cancel) [Chiller C | Chiller D]: ");
