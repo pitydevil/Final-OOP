@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>C:\Users\Mikhael Adiputra\Desktop\Inventaris.jar</jar>
+  <outfile>C:\Users\Mikhael Adiputra\Desktop\Inventaris.exe</outfile>
+  <errTitle>In order for this application to run, please install the appropriate Java</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\Users\Mikhael Adiputra\Desktop\ebooks.ico</icon>
+  <singleInstance>
+    <mutexName>Application is already running</mutexName>
+    <windowTitle>Can&apos;t run 2 instances of the same app</windowTitle>
+  </singleInstance>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.9</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <versionInfo>
+    <fileVersion>1.0.0.1</fileVersion>
+    <txtFileVersion>Binus University</txtFileVersion>
+    <fileDescription>Application for supermarket inventory</fileDescription>
+    <copyright>Timoteus Sindhikara 2301869014, Nicholas 2301852991, MIkhael Adiputra 2301957572 </copyright>
+    <productVersion>1.0.0.1</productVersion>
+    <txtProductVersion>Binus University</txtProductVersion>
+    <productName>Inventory</productName>
+    <companyName>Grup OOP Final Mikhael Adiputra, William Susanto, Ananda Sujanta</companyName>
+    <internalName>~</internalName>
+    <originalFilename>Inventaris Supermarket.exe</originalFilename>
+    <trademarks>Copyright Grup OOP Final Mikhael Adiputra, William Susanto, Ananda Sujanta</trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
+</launch4jConfig>
