@@ -769,9 +769,9 @@ public class Main extends HelperItem {
 					System.out.printf("Enter new password: ");
 					newPass = scanner.nextLine();
 					if (isCurrAdmin == true) {
-						state = admin.changePassword(currPass, newPass);
+						state = changePassword(currPass, newPass);
 					}else {
-						state = porter.changePassword(currPass, newPass);
+						state = changePassword(currPass, newPass);
 					}
 					//		namaUser = console.readLine("Username: ");
 					//		consolePass = console.readPassword("Password: ");
@@ -838,6 +838,37 @@ public class Main extends HelperItem {
 		}
 		return index;
 	}
+	
+	//Mark: - Change Password Function
+		//==================================
+		//Params : oldPass, newPass
+		//oldPass: password lama yang diberikan user
+		//newPass: password baru yang diberikan user 
+		//==================================
+		//internal Params
+		//State  : nilai yang akan di return, jika nilai pass yang lama benar dengan database maka baru diizinkan merubah pass.
+		public boolean changePassword(String oldPass, String newPass) {
+			boolean state = false;
+			if (isCurrAdmin == true) {
+				if(adminArray.get(crrnUserIndex).getPassword().equals(oldPass)==true) {
+					adminArray.set(crrnUserIndex, new Admin(crrnUsername, crrnUserID, newPass, isCurrAdmin, adminArray.get(crrnUserIndex).getNumberOfTransaction(), adminArray.get(crrnUserIndex).getJoinDate(), 
+							adminArray.get(crrnUserIndex).getLastAccessDate()));
+					state = true;
+				}else {
+					state = false;
+				}
+			}else {
+				if(porterArray.get(crrnUserIndex).getPassword().equals(oldPass)==true) {
+					porterArray.set(crrnUserIndex, new Porter(crrnUsername, crrnUserID, newPass, isCurrAdmin, porterArray.get(crrnUserIndex).getNumberOfTransaction(), porterArray.get(crrnUserIndex).getJoinDate(), 
+							porterArray.get(crrnUserIndex).getLastAccessDate()));
+					state = true;
+				}else {
+					state = false;
+				}
+			}
+			return state;
+		}
+
 	
 	//Search item function
 	//=================================
